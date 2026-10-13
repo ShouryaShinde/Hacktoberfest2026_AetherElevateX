@@ -54,6 +54,9 @@ export default function Footer({ onScrollToUpload }) {
               <li>
                 <a href="#features" onClick={(e) => handleScroll(e, 'features')}>Features</a>
               </li>
+              <li>
+                <a href="#faq" onClick={(e) => handleScroll(e, 'faq')}>FAQ</a>
+              </li>
             </ul>
           </div>
 

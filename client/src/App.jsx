@@ -1,12 +1,15 @@
 import Navbar from './components/Navbar';
 import HeroSection from './components/HeroSection';
+import ComparisonSection from './components/ComparisonSection';
 import UseCasesSection from './components/UseCaseCard';
 import HowItWorks from './components/HowItWorks';
 import LanguageSection from './components/LanguageSection';
 import ProductPreview from './components/ProductPreview';
 import FeaturesSection from './components/FeaturesSection';
+import FAQSection from './components/FAQSection';
 import FinalCTA from './components/FinalCTA';
 import Footer from './components/Footer';
+import BackToTop from './components/BackToTop';
 import './App.css';
 
 function App() {
@@ -35,33 +38,42 @@ function App() {
 
       {/* Main Content Sections */}
       <main>
-        {/* 2. Hero Section with Document Upload Panel */}
+        {/* 2. Hero Section with Interactive Document Upload Panel */}
         <HeroSection
           onScrollToUpload={scrollToUpload}
           onScrollToHowItWorks={scrollToHowItWorks}
         />
 
-        {/* 3. Use Cases Grid */}
+        {/* 3. Before vs After Document Comparison */}
+        <ComparisonSection />
+
+        {/* 4. Use Cases Grid */}
         <UseCasesSection />
 
-        {/* 4. Three-Step How It Works Flow */}
+        {/* 5. Three-Step How It Works Flow */}
         <HowItWorks />
 
-        {/* 5. Multilingual Language Accessibility */}
+        {/* 6. Multilingual Language Accessibility */}
         <LanguageSection />
 
-        {/* 6. Realistic Workspace & Document Breakdown Preview */}
+        {/* 7. Realistic Workspace & Document Breakdown Preview */}
         <ProductPreview />
 
-        {/* 7. Structured Engineered Features Grid */}
+        {/* 8. Structured Engineered Features Grid */}
         <FeaturesSection />
 
-        {/* 8. Midnight Navy Final CTA */}
+        {/* 9. Frequently Asked Questions */}
+        <FAQSection />
+
+        {/* 10. Midnight Navy Final CTA */}
         <FinalCTA onScrollToUpload={scrollToUpload} />
       </main>
 
-      {/* 9. Accessible Midnight Navy Footer */}
+      {/* 11. Accessible Midnight Navy Footer */}
       <Footer onScrollToUpload={scrollToUpload} />
+
+      {/* 12. Floating Quick Actions Bar */}
+      <BackToTop onScrollToUpload={scrollToUpload} />
     </div>
   );
 }

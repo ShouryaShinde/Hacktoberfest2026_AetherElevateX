@@ -11,6 +11,7 @@ export default function Navbar({ onScrollToUpload }) {
     { label: 'Languages', href: '#languages' },
     { label: 'Preview', href: '#product-preview' },
     { label: 'Features', href: '#features' },
+    { label: 'FAQ', href: '#faq' },
   ];
 
   const handleLinkClick = (e, href) => {

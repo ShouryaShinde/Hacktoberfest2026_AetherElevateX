@@ -1,0 +1,283 @@
+/* Comparison Section Styles — Modern Refined Palette */
+
+.comparison-section {
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.comparison-header {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto 3rem auto;
+}
+
+.comparison-headline {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 4vw, 3.25rem);
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--color-navy);
+  margin-bottom: 0.85rem;
+}
+
+.comparison-subtitle {
+  font-size: 1.05rem;
+  color: var(--color-muted);
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+/* Tabs */
+.comparison-tabs {
+  display: inline-flex;
+  background-color: var(--color-background);
+  padding: 0.35rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-border);
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.comparison-tab-btn {
+  padding: 0.6rem 1.25rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--color-muted);
+  border-radius: var(--radius-pill);
+  transition: all var(--transition-fast);
+}
+
+.comparison-tab-btn:hover {
+  color: var(--color-navy);
+}
+
+.comparison-tab-btn--active {
+  background-color: var(--color-surface);
+  color: var(--color-primary);
+  box-shadow: 0 2px 6px rgba(16, 28, 53, 0.08);
+}
+
+/* Side-by-Side Grid */
+.comparison-split-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: stretch;
+}
+
+.comparison-card {
+  padding: 2.25rem;
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Left Card: Original Confusing Text */
+.comparison-card--original {
+  background-color: #FAF5F5;
+  border: 1px solid #EED4D4;
+}
+
+.card-badge-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.doc-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-pill);
+  letter-spacing: 0.04em;
+}
+
+.doc-pill--warning {
+  background-color: #FCE8E8;
+  color: #C02C38;
+  border: 1px solid rgba(192, 44, 56, 0.25);
+}
+
+.doc-pill--success {
+  background-color: var(--color-teal-tint);
+  color: var(--color-navy);
+  border: 1px solid rgba(101, 214, 192, 0.4);
+}
+
+.doc-type-label {
+  font-size: 0.78rem;
+  font-family: var(--font-mono);
+  color: var(--color-muted);
+}
+
+.original-heading {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #4A2828;
+  margin-bottom: 1rem;
+}
+
+.original-text-box {
+  background-color: #FFFFFF;
+  border: 1px solid #E8CCCC;
+  border-radius: var(--radius-sm);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-subtle);
+}
+
+.original-paragraph {
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 0.98rem;
+  line-height: 1.7;
+  color: #3D2222;
+}
+
+.original-friction-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid #EED4D4;
+}
+
+.friction-item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 0.86rem;
+  color: #8C3E3E;
+  font-weight: 500;
+}
+
+.friction-icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: #F8DCDC;
+  color: #C02C38;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+/* Right Card: Samjho AI Clarity */
+.comparison-card--transformed {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-card);
+  border-top: 4px solid var(--color-primary);
+}
+
+.clarity-summary-box {
+  background-color: var(--color-surface-tint);
+  border-radius: var(--radius-sm);
+  padding: 1.25rem;
+  margin-bottom: 1.35rem;
+}
+
+.clarity-box-label {
+  display: block;
+  font-size: 0.74rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  letter-spacing: 0.04em;
+  margin-bottom: 0.4rem;
+}
+
+.clarity-summary-text {
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: var(--color-navy);
+  font-weight: 500;
+}
+
+.clarity-dates-group {
+  margin-bottom: 1.35rem;
+}
+
+.clarity-dates-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin-top: 0.35rem;
+}
+
+.clarity-date-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background-color: var(--color-background);
+  padding: 0.55rem 0.85rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border-subtle);
+}
+
+.date-tag-pill {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  font-weight: 700;
+  background-color: var(--color-navy);
+  color: #FFFFFF;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-xs);
+  white-space: nowrap;
+}
+
+.date-event-text {
+  font-size: 0.88rem;
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+.clarity-actions-group {
+  margin-top: auto;
+}
+
+.clarity-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 0.35rem;
+}
+
+.clarity-check-row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 0.9rem;
+  color: var(--color-text);
+}
+
+.check-icon-circle {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: #E7F6F2;
+  color: var(--color-success);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+@media (max-width: 900px) {
+  .comparison-split-grid {
+    grid-template-columns: 1fr;
+  }
+}

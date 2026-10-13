@@ -1,12 +1,61 @@
+import { useState } from 'react';
 import './ProductPreview.css';
 
 export default function ProductPreview() {
+  const [checklistState, setChecklistState] = useState([true, true, false, false]);
+  const [activeQuestionIdx, setActiveQuestionIdx] = useState(0);
+  const [copyToast, setCopyToast] = useState(false);
+
+  const checklistItems = [
+    'Return all issued books to central library before Nov 3',
+    'Check student portal for clearance status verification green tick',
+    'Download PDF hall ticket on Nov 5 and print 2 color copies',
+    'Get HOD stamp and signature on hall ticket printout'
+  ];
+
+  const questions = [
+    {
+      q: 'Can I collect my physical hall ticket from the college office?',
+      a: 'No. The notice explicitly specifies that hall tickets will only be generated in digital format through the student portal. The examination branch will not distribute physical hardcopies at the administrative counter.',
+      citation: '[Page 2, Section 4.1 · Chunk Ref: p2-c1]',
+      quote: 'Hall tickets will only be generated in digital format via the university portal. The examination branch will not distribute physical hardcopies under any circumstances.'
+    },
+    {
+      q: 'What happens if I miss the November 3 library deadline?',
+      a: 'If you clear your dues after November 3 at 5:00 PM, a late remittance penalty fee of ₹500 will be charged, and your online hall ticket generation may be temporarily withheld.',
+      citation: '[Page 3, Rule 22 · Chunk Ref: p3-c2]',
+      quote: 'Non-compliance regarding dues settlement prior to 17:00 hrs on 03-11-2026 shall entail preclusion from hall permit generation and levy of late remittance fee of Rs. 500/- under Rule 22.'
+    },
+    {
+      q: 'Do I need an attested photograph on the hall ticket printout?',
+      a: 'Yes. Once printed, you must affix a recent passport-size photograph and have it attested with the official signature and stamp of your Department Head (HOD).',
+      citation: '[Page 2, Section 4.3 · Chunk Ref: p2-c3]',
+      quote: 'Students must affix an identical photograph upon the printed permit and secure attestation from the respective Head of Department.'
+    }
+  ];
+
+  const handleToggleCheck = (index) => {
+    const updated = [...checklistState];
+    updated[index] = !updated[index];
+    setChecklistState(updated);
+  };
+
+  const completedCount = checklistState.filter(Boolean).length;
+  const progressPercent = Math.round((completedCount / checklistItems.length) * 100);
+
+  const handleCopySummary = () => {
+    const text = `Samjho AI Breakdown: Notice No. EX-2026/08\n\nSummary:\nAll undergraduate semester exams begin on Nov 15, 2026. Hall tickets available online Nov 5. Clear library and lab dues by Nov 3, 5:00 PM to avoid a ₹500 late penalty.\n\nDeadlines:\n- Nov 3, 5:00 PM: Library dues clearance cutoff\n- Nov 5: Hall ticket download opens\n\nChecklist:\n${checklistItems.map((c, i) => `[${checklistState[i] ? 'X' : ' '}] ${c}`).join('\n')}`;
+    navigator.clipboard.writeText(text);
+    setCopyToast(true);
+    setTimeout(() => setCopyToast(false), 2200);
+  };
+
   return (
     <section id="product-preview" className="product-preview-section section-spacing">
       <div className="container">
         {/* Section Header */}
         <div className="preview-intro-block">
-          <span className="eyebrow">WORKSPACE DEMONSTRATION</span>
+          <span className="eyebrow eyebrow--teal">WORKSPACE DEMONSTRATION</span>
           <h2 className="preview-title-text">
             What real clarity <span className="headline-accent">looks like.</span>
           </h2>
@@ -18,7 +67,7 @@ export default function ProductPreview() {
           <div className="preview-sample-banner">
             <span className="badge-chip badge-chip--teal">SAMPLE PREVIEW</span>
             <span className="preview-notice-text">
-              Simulated demonstration based on Phase 1 contract specifications. Not live output.
+              Simulated demonstration based on Phase 1 contract specifications.
             </span>
           </div>
         </div>
@@ -33,9 +82,14 @@ export default function ProductPreview() {
               <span className="meta-text-item">Length: 4 Pages</span>
               <span className="meta-text-item">Language: English</span>
             </div>
-            <div className="reader-status-pill">
-              <span className="status-live-dot" />
-              <span>Simulated Analysis Record</span>
+            <div className="reader-actions-right">
+              <button
+                type="button"
+                className="btn-copy-preview"
+                onClick={handleCopySummary}
+              >
+                {copyToast ? '✓ Copied to Clipboard!' : '📋 Copy Full Breakdown'}
+              </button>
             </div>
           </div>
 
@@ -55,16 +109,16 @@ export default function ProductPreview() {
             <p className="summary-body">
               All undergraduate semester examinations will commence on <strong>November 15, 2026</strong>.
               Hall tickets will be released exclusively through the student portal on <strong>November 5, 2026</strong>.
-              Students with pending library book returns or unpaid lab dues must clear them by <strong>November 3, 2026</strong>
+              Students with pending library book returns or unpaid lab dues must clear them by <strong>November 3, 2026 (5:00 PM)</strong>
               to prevent their hall tickets from being withheld. No physical hall tickets will be issued at the administration counter.
             </p>
           </div>
 
           {/* Structured Two-Column Breakdown */}
           <div className="reader-breakdown-columns">
-            {/* Left Column: Key Points & Deadlines */}
+            {/* Left Column: Requirements & Deadlines */}
             <div className="reader-col">
-              {/* Key Points */}
+              {/* Important Requirements */}
               <div className="breakdown-box">
                 <h4 className="breakdown-heading">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -81,12 +135,12 @@ export default function ProductPreview() {
                     <strong>Clearance Prerequisite:</strong> Library book clearance is strictly required before portal generation unlocks.
                   </li>
                   <li>
-                    <strong>Attestation Requirement:</strong> Affix a recent passport-size photograph and have it attested by your department head.
+                    <strong>Attestation Requirement:</strong> Affix a recent passport photograph and have it attested by your department head.
                   </li>
                 </ul>
               </div>
 
-              {/* Dates and Deadlines */}
+              {/* Deadlines & Amounts */}
               <div className="breakdown-box">
                 <h4 className="breakdown-heading">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -125,36 +179,46 @@ export default function ProductPreview() {
 
             {/* Right Column: Action Checklist & Grounded Q&A */}
             <div className="reader-col">
-              {/* Action Checklist */}
+              {/* Action Checklist with Interactive Progress Meter */}
               <div className="breakdown-box">
-                <h4 className="breakdown-heading">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
-                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
-                  </svg>
-                  Action Checklist
-                </h4>
+                <div className="checklist-heading-row">
+                  <h4 className="breakdown-heading" style={{ marginBottom: 0, paddingBottom: 0, borderBottom: 'none' }}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                      <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+                    </svg>
+                    Action Checklist
+                  </h4>
+                  <span className="checklist-progress-text">
+                    {completedCount} of {checklistItems.length} ({progressPercent}%)
+                  </span>
+                </div>
+
+                <div className="checklist-bar">
+                  <div
+                    className="checklist-bar-fill"
+                    style={{ width: `${progressPercent}%` }}
+                  />
+                </div>
+
                 <div className="checklist-stack">
-                  <label className="checklist-row">
-                    <input type="checkbox" defaultChecked className="check-box-input" />
-                    <span className="check-text">Return all issued books to central library before Nov 3</span>
-                  </label>
-                  <label className="checklist-row">
-                    <input type="checkbox" defaultChecked className="check-box-input" />
-                    <span className="check-text">Check student portal for clearance status verification</span>
-                  </label>
-                  <label className="checklist-row">
-                    <input type="checkbox" className="check-box-input" />
-                    <span className="check-text">Download PDF hall ticket on Nov 5 and print 2 copies</span>
-                  </label>
-                  <label className="checklist-row">
-                    <input type="checkbox" className="check-box-input" />
-                    <span className="check-text">Get HOD stamp and signature on hall ticket printout</span>
-                  </label>
+                  {checklistItems.map((item, idx) => (
+                    <label key={item} className="checklist-row">
+                      <input
+                        type="checkbox"
+                        checked={checklistState[idx]}
+                        onChange={() => handleToggleCheck(idx)}
+                        className="check-box-input"
+                      />
+                      <span className={`check-text ${checklistState[idx] ? 'check-text--done' : ''}`}>
+                        {item}
+                      </span>
+                    </label>
+                  ))}
                 </div>
               </div>
 
-              {/* Grounded Follow-up Q&A */}
+              {/* Document-Grounded Follow-up Q&A */}
               <div className="breakdown-box qa-box">
                 <h4 className="breakdown-heading">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -163,22 +227,38 @@ export default function ProductPreview() {
                   Document-Grounded Q&amp;A
                 </h4>
 
+                {/* Preset Interactive Question Pills */}
+                <div className="qa-pills-selector">
+                  <span className="qa-pills-label">Sample Questions:</span>
+                  <div className="qa-pills-group">
+                    {questions.map((qItem, idx) => (
+                      <button
+                        key={qItem.q}
+                        type="button"
+                        className={`qa-selector-pill ${activeQuestionIdx === idx ? 'qa-selector-pill--active' : ''}`}
+                        onClick={() => setActiveQuestionIdx(idx)}
+                      >
+                        Q{idx + 1}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
                 <div className="qa-thread">
                   <div className="qa-user-bubble">
                     <span className="qa-label">USER QUESTION:</span>
                     <p className="qa-user-text">
-                      &ldquo;Can I collect my physical hall ticket from the college office if I don&apos;t have a printer?&rdquo;
+                      &ldquo;{questions[activeQuestionIdx].q}&rdquo;
                     </p>
                   </div>
 
                   <div className="qa-answer-card">
                     <div className="qa-answer-header">
                       <span className="qa-label">GROUNDED ANSWER:</span>
-                      <span className="badge-chip badge-chip--success">HIGH CONFIDENCE</span>
+                      <span className="badge-chip badge-chip--success">VERIFIED EVIDENCE</span>
                     </div>
                     <p className="qa-answer-paragraph">
-                      <strong>No.</strong> The notice explicitly specifies that hall tickets will only be generated in digital format
-                      through the student portal. The examination branch will <em>not</em> distribute physical hardcopies at the administrative counter.
+                      {questions[activeQuestionIdx].a}
                     </p>
 
                     <div className="citation-container">
@@ -187,12 +267,12 @@ export default function ProductPreview() {
                           <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
                           <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
                         </svg>
-                        Verified Source Passage:
+                        Source Passage Excerpt:
                       </span>
                       <blockquote className="citation-quote-text">
-                        &ldquo;Hall tickets will only be generated in digital format via the university portal. The examination branch will not distribute physical hardcopies under any circumstances.&rdquo;
+                        &ldquo;{questions[activeQuestionIdx].quote}&rdquo;
                       </blockquote>
-                      <span className="citation-location">[Page 2, Section 4.1 · Chunk Ref: p2-c1]</span>
+                      <span className="citation-location">{questions[activeQuestionIdx].citation}</span>
                     </div>
                   </div>
                 </div>
