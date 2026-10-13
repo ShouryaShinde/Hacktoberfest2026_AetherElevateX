@@ -43,3 +43,22 @@ export class RateLimitedError extends AppError {
     super(message, 429, 'RATE_LIMITED');
   }
 }
+
+export class ModelProviderError extends AppError {
+  constructor(message = 'The AI model provider encountered an error.') {
+    super(message, 502, 'MODEL_PROVIDER_ERROR');
+  }
+}
+
+export class ModelTimeoutError extends AppError {
+  constructor(message = 'The AI model request timed out.') {
+    super(message, 504, 'MODEL_TIMEOUT');
+  }
+}
+
+export class InvalidModelOutputError extends AppError {
+  constructor(message = 'The AI model output did not match the required schema.') {
+    super(message, 502, 'INVALID_MODEL_OUTPUT');
+  }
+}
+

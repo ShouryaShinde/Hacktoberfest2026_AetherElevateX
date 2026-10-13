@@ -1,12 +1,13 @@
 import crypto from 'node:crypto';
 import { processDocumentInput } from '../services/document.service.js';
+import { analyzeDocumentText } from '../services/analysis.service.js';
 
 /**
  * Handle document analyze request
  */
 export const analyzeDocument = async (req, res, next) => {
   try {
-    const { documentText, language, detailLevel } = req.body;
+    const { documentText, language, detailLevel, userQuestion } = req.body;
     const file = req.file;
 
     const processed = await processDocumentInput({
@@ -18,18 +19,18 @@ export const analyzeDocument = async (req, res, next) => {
 
     const analysisId = crypto.randomUUID();
 
+    const analysisData = await analyzeDocumentText({
+      text: processed.extractedText,
+      language: processed.language,
+      detailLevel: processed.detailLevel,
+      userQuestion: userQuestion || null,
+      pages: processed.metadata.pages || [],
+    });
+
     return res.status(200).json({
       success: true,
       analysisId,
-      data: {
-        inputType: processed.metadata.inputType,
-        language: processed.language,
-        detailLevel: processed.detailLevel,
-        characterCount: processed.metadata.characterCount,
-        numPages: processed.metadata.numPages,
-        extractedTextPreview: processed.extractedText.slice(0, 200),
-        message: 'Document accepted and text extracted successfully.',
-      },
+      data: analysisData,
     });
   } catch (error) {
     next(error);

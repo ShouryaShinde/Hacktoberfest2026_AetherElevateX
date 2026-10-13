@@ -54,6 +54,7 @@ export const processDocumentInput = async ({
     const pdfResult = await extractTextFromPdf(file.buffer);
     rawText = pdfResult.text;
     metadata.numPages = pdfResult.numPages;
+    metadata.pages = pdfResult.pages;
     metadata.info = pdfResult.info;
   } else {
     rawText = documentText;

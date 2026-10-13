@@ -1,11 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import app from '../src/app.js';
+import { setCustomProvider, getLlmProvider } from '../src/providers/index.js';
+import { MockLlmProvider } from '../src/providers/mock/mock.provider.js';
+import { GemmaProvider } from '../src/providers/gemma/gemma.provider.js';
+import { DocumentAnalysisSchema } from '../src/validators/analysis.schema.js';
 
 let server;
 let baseUrl;
 
 test.before(async () => {
+  setCustomProvider(new MockLlmProvider());
   await new Promise((resolve) => {
     server = app.listen(0, () => {
       const port = server.address().port;
@@ -16,6 +21,7 @@ test.before(async () => {
 });
 
 test.after(async () => {
+  setCustomProvider(null);
   await new Promise((resolve) => server.close(resolve));
 });
 
@@ -38,7 +44,10 @@ test('GET /api/health returns backward-compatible message', async () => {
   assert.equal(data.message, 'Server is running');
 });
 
-test('POST /api/v1/documents/analyze with valid pasted text', async () => {
+test('POST /api/v1/documents/analyze returns schema-valid structured data with Mock provider', async () => {
+  const mockProvider = new MockLlmProvider();
+  setCustomProvider(mockProvider);
+
   const res = await fetch(`${baseUrl}/api/v1/documents/analyze`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -53,12 +62,98 @@ test('POST /api/v1/documents/analyze with valid pasted text', async () => {
   const data = await res.json();
   assert.equal(data.success, true);
   assert.ok(data.analysisId);
-  assert.equal(data.data.inputType, 'text');
+
+  // Validate that response strictly matches DocumentAnalysisSchema
+  const parseResult = DocumentAnalysisSchema.safeParse(data.data);
+  assert.equal(parseResult.success, true, 'Response must match DocumentAnalysisSchema');
+
   assert.equal(data.data.language, 'English');
-  assert.ok(data.data.characterCount > 0);
+  assert.ok(typeof data.data.summary === 'string');
+  assert.ok(Array.isArray(data.data.main_points));
+  assert.ok(Array.isArray(data.data.action_steps));
+  assert.ok(typeof data.data.eligibility === 'object');
+});
+
+test('POST /api/v1/documents/analyze handles model output wrapped in markdown code fences', async () => {
+  const mockProvider = new MockLlmProvider();
+  const validJson = await mockProvider.generateStructured({ userPrompt: '{}' });
+  mockProvider.setMockResponse(`\`\`\`json\n${validJson}\n\`\`\``);
+  setCustomProvider(mockProvider);
+
+  const res = await fetch(`${baseUrl}/api/v1/documents/analyze`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      documentText: 'Notice: Application submission deadline announced.',
+    }),
+  });
+
+  assert.equal(res.status, 200);
+  const data = await res.json();
+  assert.equal(data.success, true);
+  assert.ok(data.data.summary);
+});
+
+test('POST /api/v1/documents/analyze fails safely on malformed JSON model output (502)', async () => {
+  const mockProvider = new MockLlmProvider();
+  mockProvider.setMockResponse('This is not a JSON object at all.');
+  setCustomProvider(mockProvider);
+
+  const res = await fetch(`${baseUrl}/api/v1/documents/analyze`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      documentText: 'Some document text to analyze.',
+    }),
+  });
+
+  assert.equal(res.status, 502);
+  const data = await res.json();
+  assert.equal(data.success, false);
+  assert.equal(data.error.code, 'INVALID_MODEL_OUTPUT');
+  assert.ok(data.error.requestId);
+});
+
+test('POST /api/v1/documents/analyze handles model provider failure (502)', async () => {
+  const mockProvider = new MockLlmProvider();
+  mockProvider.setShouldFail(true, 'provider');
+  setCustomProvider(mockProvider);
+
+  const res = await fetch(`${baseUrl}/api/v1/documents/analyze`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      documentText: 'Some document text to analyze.',
+    }),
+  });
+
+  assert.equal(res.status, 502);
+  const data = await res.json();
+  assert.equal(data.success, false);
+  assert.equal(data.error.code, 'MODEL_PROVIDER_ERROR');
+});
+
+test('POST /api/v1/documents/analyze handles model timeout safely (504)', async () => {
+  const mockProvider = new MockLlmProvider();
+  mockProvider.setShouldFail(true, 'timeout');
+  setCustomProvider(mockProvider);
+
+  const res = await fetch(`${baseUrl}/api/v1/documents/analyze`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      documentText: 'Some document text to analyze.',
+    }),
+  });
+
+  assert.equal(res.status, 504);
+  const data = await res.json();
+  assert.equal(data.success, false);
+  assert.equal(data.error.code, 'MODEL_TIMEOUT');
 });
 
 test('POST /api/v1/documents/analyze with missing text and file returns VALIDATION_ERROR (400)', async () => {
+  setCustomProvider(new MockLlmProvider());
   const res = await fetch(`${baseUrl}/api/v1/documents/analyze`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -116,7 +211,10 @@ test('POST /api/v1/documents/analyze with non-PDF file upload returns UNSUPPORTE
   assert.equal(data.error.code, 'UNSUPPORTED_FILE_TYPE');
 });
 
-test('POST /api/v1/documents/analyze with valid minimal PDF upload returns 200', async () => {
+test('POST /api/v1/documents/analyze with valid minimal PDF upload returns schema-valid data', async () => {
+  const mockProvider = new MockLlmProvider();
+  setCustomProvider(mockProvider);
+
   const minimalPdfString =
     '%PDF-1.4\n' +
     '1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj\n' +
@@ -150,8 +248,7 @@ test('POST /api/v1/documents/analyze with valid minimal PDF upload returns 200',
   assert.equal(res.status, 200);
   const data = await res.json();
   assert.equal(data.success, true);
-  assert.equal(data.data.inputType, 'pdf');
-  assert.ok(data.data.extractedTextPreview.includes('Samjho AI Notice'));
+  assert.ok(data.data.summary);
 });
 
 test('POST /api/v1/documents/analyze with both file and text returns VALIDATION_ERROR (400)', async () => {
@@ -177,4 +274,32 @@ test('GET /unknown-route returns 404 NOT_FOUND', async () => {
   const data = await res.json();
   assert.equal(data.success, false);
   assert.equal(data.error.code, 'NOT_FOUND');
+});
+
+test('GemmaProvider throws ModelProviderError when baseUrl is not configured', async () => {
+  const provider = new GemmaProvider({ baseUrl: '' });
+  await assert.rejects(
+    () => provider.generateStructured({ systemPrompt: 'sys', userPrompt: 'usr', schemaName: 'Test' }),
+    (err) => err.code === 'MODEL_PROVIDER_ERROR'
+  );
+});
+
+test('GemmaProvider respects timeout and throws ModelTimeoutError', async () => {
+  // Use a slow dummy server that does not respond in 50ms
+  const dummyServer = app.listen(0);
+  const port = dummyServer.address().port;
+  const slowBaseUrl = `http://127.0.0.1:${port}`;
+
+  const provider = new GemmaProvider({
+    baseUrl: slowBaseUrl,
+    timeoutMs: 50,
+    maxRetries: 0,
+  });
+
+  await assert.rejects(
+    () => provider.generateStructured({ systemPrompt: 'sys', userPrompt: 'usr', schemaName: 'Test' }),
+    (err) => err.code === 'MODEL_TIMEOUT' || err.code === 'MODEL_PROVIDER_ERROR'
+  );
+
+  await new Promise((r) => dummyServer.close(r));
 });
