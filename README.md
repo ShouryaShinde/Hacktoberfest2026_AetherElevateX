@@ -1,24 +1,95 @@
-# Samjho AI — Antigravity Context Pack
+# Samjho AI
 
-This archive contains the context and implementation documents for building Samjho AI with Antigravity.
+> **Understand the information. Know what to do next.**
 
-## Start here
-1. Extract the archive into the root of your repository.
-2. Keep `AGENTS.md` at the repository root.
-3. Keep the `docs/` directory at the repository root.
-4. Ask Antigravity to read `AGENTS.md` and `docs/README.md`.
-5. Tell it to inspect the existing repository and implement **Phase 0 only** from `docs/IMPLEMENTATION_PLAN.md`.
-6. Review the changes before moving to Phase 1.
+Samjho AI helps people understand complex documents (college notices, circulars, scholarship announcements, application forms, and public notices) in plain language and turns them into reliable, actionable next steps.
 
-## Suggested first Antigravity prompt
-“Read `AGENTS.md` and all documents referenced by it. Inspect the current repository and report its existing stack, structure, and gaps against the documentation. Do not implement features yet. Then implement Phase 0 only from `docs/IMPLEMENTATION_PLAN.md`, preserving existing working code. Run the available checks and summarize the result.”
+---
 
-## Key decisions
-- React + Vite + TypeScript + Tailwind + shadcn/ui frontend.
-- Node.js + Express + TypeScript backend.
-- MVC/service/provider separation.
-- Gemma 4 behind a provider adapter.
-- Stable JSON schema validated server-side.
-- PDF/pasted text first; OCR later.
-- Temporary document processing; no permanent storage in MVP.
-- Grounded Q&A with validated source chunk references.
+## Repository Structure
+
+The project is structured into frontend and backend applications with documentation at the root:
+
+```text
+Hacktoberfest2026_AetherElevateX/
+├── docs/                   # Specifications, architecture, contracts, and implementation plan
+├── server/                 # Backend API (Node.js, Express, MVC architecture)
+│   ├── src/
+│   │   ├── config/         # Database and environment configurations
+│   │   ├── controllers/    # Request controllers
+│   │   ├── middlewares/    # Custom middlewares
+│   │   ├── models/         # Database models and schemas
+│   │   ├── routes/         # API routes
+│   │   ├── services/       # Core business logic services
+│   │   ├── utils/          # Shared utilities and helpers
+│   │   ├── app.js          # Express app configuration
+│   │   └── server.js       # Server entry point
+│   ├── .env.example        # Environment variable template
+│   ├── package.json        # Backend dependencies and scripts
+│   └── README.md           # Backend documentation
+├── client/                 # Frontend application (React + Vite)
+├── AGENTS.md               # Antigravity coding guidelines and rules
+└── README.md               # Project root documentation
+```
+
+---
+
+## Tech Stack
+
+- **Backend**: Node.js (ES Modules), Express.js, Mongoose, dotenv, cors, nodemon
+- **Frontend**: React, Vite
+- **Architecture**: MVC (Model-View-Controller) / Service separation
+- **AI Engine (Upcoming)**: Gemma 4 inference adapter for document summarization and grounded Q&A
+
+---
+
+## Getting Started
+
+### 1. Prerequisites
+- [Node.js](https://nodejs.org/) (v18+ recommended)
+- [MongoDB](https://www.mongodb.com/) (local daemon or MongoDB Atlas cluster)
+
+### 2. Backend Setup (`server/`)
+```bash
+cd server
+npm install
+cp .env.example .env
+```
+Configure your `.env` with:
+```env
+PORT=5000
+MONGODB_URI=your_mongodb_connection_string
+```
+
+Run in development mode:
+```bash
+npm run dev
+```
+
+Run in production mode:
+```bash
+npm start
+```
+
+Health check:
+```bash
+curl http://localhost:5000/api/health
+```
+
+### 3. Frontend Setup (`client/`)
+```bash
+cd client
+npm install
+npm run dev
+```
+
+---
+
+## Implementation Status
+
+- **Phase 0 (Baseline Setup & Inspection)**: Completed.
+  - Backend baseline established with Express and Mongoose structure.
+  - Health check endpoint (`GET /api/health`) configured.
+  - Note: Connecting to MongoDB Atlas requires adding your client IP to the Atlas Network Access whitelist.
+- **Phase 1 (UI Shell & Mock Data)**: Pending approval.
+
