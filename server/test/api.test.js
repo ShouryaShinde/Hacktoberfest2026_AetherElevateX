@@ -4,7 +4,9 @@ import app from '../src/app.js';
 import { setCustomProvider, getLlmProvider } from '../src/providers/index.js';
 import { MockLlmProvider } from '../src/providers/mock/mock.provider.js';
 import { GemmaProvider } from '../src/providers/gemma/gemma.provider.js';
+import { OllamaProvider } from '../src/providers/ollama/ollama.provider.js';
 import { DocumentAnalysisSchema } from '../src/validators/analysis.schema.js';
+
 
 let server;
 let baseUrl;
@@ -303,3 +305,38 @@ test('GemmaProvider respects timeout and throws ModelTimeoutError', async () => 
 
   await new Promise((r) => dummyServer.close(r));
 });
+
+test('OllamaProvider throws ModelProviderError when connecting to offline Ollama', async () => {
+  const provider = new OllamaProvider({ baseUrl: 'http://127.0.0.1:59999' });
+  await assert.rejects(
+    () => provider.generateStructured({ systemPrompt: 'sys', userPrompt: 'usr', schemaName: 'Test' }),
+    (err) => err.code === 'MODEL_PROVIDER_ERROR' && err.message.includes('Cannot connect to local Ollama')
+  );
+});
+
+test('OllamaProvider throws clear message when target model is not available locally', async () => {
+  const provider = new OllamaProvider({ model: 'non-existent-model-xyz' });
+  await assert.rejects(
+    () => provider.generateStructured({ systemPrompt: 'sys', userPrompt: 'usr', schemaName: 'Test' }),
+    (err) => err.code === 'MODEL_PROVIDER_ERROR' && err.message.includes("Please run: ollama pull")
+  );
+});
+
+test('OllamaProvider respects timeout and throws ModelTimeoutError', async () => {
+  const dummyServer = app.listen(0);
+  const port = dummyServer.address().port;
+  const slowBaseUrl = `http://127.0.0.1:${port}`;
+
+  const provider = new OllamaProvider({
+    baseUrl: slowBaseUrl,
+    timeoutMs: 50,
+  });
+
+  await assert.rejects(
+    () => provider.generateStructured({ systemPrompt: 'sys', userPrompt: 'usr', schemaName: 'Test' }),
+    (err) => err.code === 'MODEL_TIMEOUT' || err.code === 'MODEL_PROVIDER_ERROR'
+  );
+
+  await new Promise((r) => dummyServer.close(r));
+});
+

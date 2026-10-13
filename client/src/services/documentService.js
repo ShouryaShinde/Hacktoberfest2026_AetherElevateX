@@ -1,17 +1,15 @@
 /**
  * Document Processing Service
- * Handles client-side file validation, file inspection, and backend integration checking.
- * Strictly adheres to MVP boundaries: no fabricated AI outputs when the backend is not yet connected.
+ * Client-side file validation and unified analysis bridge to backend API.
+ * Ref: docs/BACKEND_CONNECTION_GUIDE.md & docs/IMPLEMENTATION_PLAN.md (Phase 4)
  */
 
+import { analyzeDocument, checkServerHealth } from './api.js';
+
 export const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10 MB limit per API contract
-export const ALLOWED_FILE_TYPES = [
-  'application/pdf',
-  'image/png',
-  'image/jpeg',
-  'image/jpg'
-];
-export const ALLOWED_EXTENSIONS = ['.pdf', '.png', '.jpg', '.jpeg'];
+export const MAX_TEXT_LENGTH_CHARS = 100000; // 100,000 characters limit
+export const ALLOWED_FILE_TYPES = ['application/pdf'];
+export const ALLOWED_EXTENSIONS = ['.pdf'];
 
 /**
  * Validates a file against allowed MIME types, extensions, and size limits.
@@ -30,7 +28,7 @@ export function validateDocumentFile(file) {
   if (!hasValidExt && !hasValidMime) {
     return {
       valid: false,
-      error: `Unsupported format "${extension || file.type}". Please upload a PDF, PNG, JPG, or JPEG file.`
+      error: `Unsupported format "${extension || file.type}". Please upload a PDF file (.pdf). For other formats, you can copy and paste the document text.`
     };
   }
 
@@ -52,12 +50,32 @@ export function validateDocumentFile(file) {
 }
 
 /**
+ * Validates raw pasted document text.
+ * @param {string} text 
+ * @returns {{ valid: boolean, error: string | null }}
+ */
+export function validateDocumentText(text) {
+  if (!text || !text.trim()) {
+    return { valid: false, error: 'Please enter or paste some document text to analyze.' };
+  }
+
+  if (text.trim().length > MAX_TEXT_LENGTH_CHARS) {
+    return {
+      valid: false,
+      error: `Text exceeds the maximum limit of ${MAX_TEXT_LENGTH_CHARS.toLocaleString()} characters (current: ${text.length.toLocaleString()}).`
+    };
+  }
+
+  return { valid: true, error: null };
+}
+
+/**
  * Formats byte size into human readable string.
  * @param {number} bytes 
  * @returns {string}
  */
 export function formatFileSize(bytes) {
-  if (bytes === 0) return '0 B';
+  if (!bytes || bytes === 0) return '0 B';
   const k = 1024;
   const sizes = ['B', 'KB', 'MB', 'GB'];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
@@ -69,76 +87,80 @@ export function formatFileSize(bytes) {
  * @returns {Promise<{ online: boolean, message: string }>}
  */
 export async function checkBackendStatus() {
-  const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
-  try {
-    const response = await fetch(`${apiBase}/health`, {
-      method: 'GET',
-      headers: { 'Accept': 'application/json' }
-    });
-    if (response.ok) {
-      const data = await response.json();
-      return { online: true, message: data.message || 'Server online' };
-    }
-    return { online: false, message: `Server returned status ${response.status}` };
-  } catch {
-    return { online: false, message: 'Server not reachable' };
+  const result = await checkServerHealth();
+  if (result.success) {
+    return { online: true, message: `Server online (${result.status})` };
   }
+  return { online: false, message: result.error || 'Server not reachable' };
 }
 
 /**
- * Handles document submission flow.
- * Checks for live endpoint and reports actual server readiness without fabricating AI data.
- * @param {File} file 
- * @param {string} language 
- * @param {string} detailLevel 
- * @returns {Promise<{ success: boolean, backendReady: boolean, message: string, fileInfo: object }>}
+ * Handles document submission flow to the backend API.
+ * @param {Object} params
+ * @param {File} [params.file]
+ * @param {string} [params.documentText]
+ * @param {string} [params.language]
+ * @param {string} [params.detailLevel]
+ * @param {string} [params.userQuestion]
+ * @returns {Promise<{ success: boolean, analysisId: string, data: object, fileInfo?: object }>}
  */
-export async function submitDocumentForAnalysis(file, language = 'English', detailLevel = 'standard') {
-  const validation = validateDocumentFile(file);
-  if (!validation.valid) {
-    throw new Error(validation.error);
-  }
-
-  const fileInfo = {
-    name: file.name,
-    size: formatFileSize(file.size),
-    type: file.type || file.name.split('.').pop().toUpperCase(),
-    language,
-    detailLevel
-  };
-
-  // Inspect if backend analysis endpoint exists
-  const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
-  try {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('language', language);
-    formData.append('detailLevel', detailLevel);
-
-    const res = await fetch(`${apiBase}/v1/documents/analyze`, {
-      method: 'POST',
-      body: formData
-    });
-
-    if (res.ok) {
-      const data = await res.json();
-      return {
-        success: true,
-        backendReady: true,
-        message: 'Analysis completed successfully.',
-        data,
-        fileInfo
-      };
+export async function submitDocumentForAnalysis({
+  file = null,
+  documentText = '',
+  language = 'English',
+  detailLevel = 'standard',
+  userQuestion = ''
+}) {
+  if (file) {
+    const validation = validateDocumentFile(file);
+    if (!validation.valid) {
+      throw new Error(validation.error);
     }
-  } catch {
-    // Expected in Phase 0 / Phase 1: backend endpoint is not yet connected
+  } else {
+    const textValidation = validateDocumentText(documentText);
+    if (!textValidation.valid) {
+      throw new Error(textValidation.error);
+    }
   }
 
-  // Truthful response: Document is validated, but server pipeline is pending Phase 2/3
+  const result = await analyzeDocument({
+    file,
+    documentText,
+    language,
+    detailLevel,
+    userQuestion,
+  });
+
+  const fileInfo = file
+    ? {
+        name: file.name,
+        size: formatFileSize(file.size),
+        type: 'PDF',
+        language,
+        detailLevel
+      }
+    : {
+        name: 'Pasted Document Text',
+        size: `${documentText.trim().length} chars`,
+        type: 'TEXT',
+        language,
+        detailLevel
+      };
+
   return {
-    success: true,
-    backendReady: false,
-    message: 'File successfully validated on the client! The backend AI processing pipeline (Phase 2 & 3) is currently under active construction. The interface and validation are ready.',
-    fileInfo
+    ...result,
+    fileInfo,
   };
 }
+
+export default {
+  validateDocumentFile,
+  validateDocumentText,
+  formatFileSize,
+  checkBackendStatus,
+  submitDocumentForAnalysis,
+  ALLOWED_EXTENSIONS,
+  ALLOWED_FILE_TYPES,
+  MAX_FILE_SIZE_BYTES,
+  MAX_TEXT_LENGTH_CHARS,
+};

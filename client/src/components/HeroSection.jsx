@@ -23,20 +23,19 @@ export default function HeroSection({ onScrollToUpload, onScrollToHowItWorks }) 
   return (
     <section id="hero" className="hero-section">
       <div className="container hero-container">
-        {/* Left Side: Confident Editorial Typography */}
-        <div className="hero-content">
+        {/* Editorial Headline Header */}
+        <div className="hero-header-block">
           <div className="eyebrow hero-eyebrow">
             <span className="eyebrow-dot" />
             DOCUMENT UNDERSTANDING, MADE SIMPLE
           </div>
 
           <h1 className="hero-headline">
-            Complex information.<br />
-            <span className="hero-highlight">Clear understanding.</span>
+            Complex information. <span className="hero-highlight">Clear understanding.</span>
           </h1>
 
           <p className="hero-description">
-            Understand notices, college circulars, insurance policies, forms, and important documents in simple language.
+            Upload notices, circulars, insurance clauses, forms, or bills. Experience live in-memory execution and verified factual grounding.
           </p>
 
           <div className="hero-actions">
@@ -45,7 +44,7 @@ export default function HeroSection({ onScrollToUpload, onScrollToHowItWorks }) 
               className="btn btn-primary hero-cta"
               onClick={handleScrollToUpload}
             >
-              Understand a Document
+              Analyze a Document
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                 <line x1="5" y1="12" x2="19" y2="12" />
                 <polyline points="12 5 19 12 12 19" />
@@ -63,13 +62,13 @@ export default function HeroSection({ onScrollToUpload, onScrollToHowItWorks }) 
           <div className="hero-supporting-line">
             <span className="supporting-check">✓</span>
             <span className="supporting-text">
-              Simple explanations · Supported languages · Document-based answers
+              Multer In-Memory Processing ·Gemma 4 31B Instruct · Zero Hallucination Grounding
             </span>
           </div>
         </div>
 
-        {/* Right Side: Interactive Document Upload Panel */}
-        <div className="hero-upload-column">
+        {/* Studio Window: Multer Upload on Left, Execution Cycle & Proper Content on Right */}
+        <div className="hero-workspace-full">
           <DocumentUploader />
         </div>
       </div>

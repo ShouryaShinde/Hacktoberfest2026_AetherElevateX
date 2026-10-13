@@ -40,8 +40,13 @@ export const extractTextFromPdf = async (buffer) => {
       }
     }
 
+    // Remove synthetic page markers inserted by parser (e.g. "-- 1 of 1 --")
+    const cleanedText = (textResult.text || '')
+      .replace(/--\s*\d+\s+of\s+\d+\s*--/gi, '')
+      .trim();
+
     return {
-      text: textResult.text || '',
+      text: cleanedText,
       numPages,
       pages,
     };

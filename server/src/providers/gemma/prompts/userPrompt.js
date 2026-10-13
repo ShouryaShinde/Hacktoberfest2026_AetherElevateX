@@ -15,12 +15,17 @@ export const buildUserPrompt = ({
   detailLevel = 'standard',
   sourceChunks = [],
 }) => {
+  // Provide chunk references without duplicating full document text to keep local inference fast
+  const chunkRefs = Array.isArray(sourceChunks)
+    ? sourceChunks.map((c) => ({ chunk_id: c.chunk_id, page: c.page }))
+    : [];
+
   const payload = {
     document_text: documentText,
     user_question: userQuestion,
     language,
     detail_level: detailLevel,
-    source_chunks: sourceChunks,
+    source_chunks: chunkRefs,
   };
 
   return JSON.stringify(payload);

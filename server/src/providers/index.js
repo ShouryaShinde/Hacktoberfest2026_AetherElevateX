@@ -1,6 +1,7 @@
 import config from '../config/index.js';
 import MockLlmProvider from './mock/mock.provider.js';
 import GemmaProvider from './gemma/gemma.provider.js';
+import OllamaProvider from './ollama/ollama.provider.js';
 
 let activeProvider = null;
 
@@ -10,16 +11,25 @@ let activeProvider = null;
  * @returns {import('./base.provider.js').BaseLlmProvider}
  */
 export const getLlmProvider = (providerType = config.gemmaProvider) => {
+  if (providerType === 'ollama') {
+    return new OllamaProvider();
+  }
+
   if (providerType === 'mock') {
     return new MockLlmProvider();
   }
 
-  if (providerType === 'hosted' || providerType === 'local') {
+  if (providerType === 'hosted') {
     return new GemmaProvider();
   }
 
-  return new MockLlmProvider();
+  if (providerType === 'local') {
+    return new OllamaProvider();
+  }
+
+  return new OllamaProvider();
 };
+
 
 /**
  * For testing purposes: set an explicit provider instance
