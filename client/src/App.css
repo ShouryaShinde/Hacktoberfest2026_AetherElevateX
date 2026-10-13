@@ -1,2 +1,6 @@
-
-@import "tailwindcss";
+/* App specific layout utilities and overrides */
+.app-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}

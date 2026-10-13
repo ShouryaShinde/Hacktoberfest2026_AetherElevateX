@@ -1,0 +1,356 @@
+/* Product Preview Styles — Modern Refined Palette */
+
+.product-preview-section {
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.preview-intro-block {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto 3.5rem auto;
+}
+
+.preview-title-text {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 4vw, 3.25rem);
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--color-navy);
+  margin-bottom: 0.85rem;
+}
+
+.preview-subtitle-text {
+  font-size: 1.05rem;
+  color: var(--color-muted);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.preview-sample-banner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background-color: var(--color-surface-tint);
+  border: 1px solid rgba(76, 99, 217, 0.2);
+  padding: 0.4rem 0.95rem;
+  border-radius: var(--radius-pill);
+}
+
+.preview-notice-text {
+  font-size: 0.8rem;
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+/* Workspace Reader Card */
+.workspace-reader-card {
+  background-color: #FFFFFF;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+  box-shadow: var(--shadow-card);
+}
+
+.reader-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--color-border-subtle);
+  margin-bottom: 1.75rem;
+}
+
+.reader-doc-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+}
+
+.meta-text-item {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  color: var(--color-muted);
+}
+
+.reader-status-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.status-live-dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--color-teal);
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px rgba(101, 214, 192, 0.25);
+}
+
+/* Title Section */
+.reader-title-section {
+  margin-bottom: 1.75rem;
+}
+
+.eyebrow-mini {
+  display: block;
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--color-muted);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.35rem;
+}
+
+.reader-document-title {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--color-navy);
+  line-height: 1.3;
+}
+
+/* Summary Panel */
+.reader-summary-panel {
+  background-color: var(--color-surface-tint);
+  border-left: 4px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.panel-badge-row {
+  margin-bottom: 0.75rem;
+}
+
+.summary-body {
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: var(--color-text);
+}
+
+/* Two-Column Grid */
+.reader-breakdown-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.75rem;
+}
+
+.reader-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.breakdown-box {
+  background-color: #FFFFFF;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 1.65rem;
+  box-shadow: var(--shadow-subtle);
+}
+
+.breakdown-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-navy);
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--color-border-subtle);
+  margin-bottom: 1.25rem;
+}
+
+.breakdown-heading svg {
+  color: var(--color-primary);
+}
+
+/* Requirements List */
+.requirements-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.requirements-list li {
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--color-text);
+  position: relative;
+  padding-left: 1.25rem;
+}
+
+.requirements-list li::before {
+  content: '▪';
+  position: absolute;
+  left: 0;
+  color: var(--color-primary);
+  font-size: 1rem;
+}
+
+/* Deadlines List */
+.deadlines-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.deadline-row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.75rem;
+  background-color: var(--color-background);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border-subtle);
+}
+
+.deadline-badge {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  background-color: var(--color-navy);
+  color: #FFFFFF;
+  padding: 0.35rem 0.6rem;
+  border-radius: var(--radius-xs);
+  white-space: nowrap;
+}
+
+.deadline-badge--tint {
+  background-color: var(--color-primary);
+}
+
+.deadline-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.deadline-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-navy);
+}
+
+.deadline-sub {
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
+
+/* Checklist Stack */
+.checklist-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.checklist-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.92rem;
+  color: var(--color-text);
+  cursor: pointer;
+  line-height: 1.45;
+}
+
+.check-box-input {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+
+/* Q&A Thread */
+.qa-box {
+  border-left: 4px solid var(--color-primary);
+}
+
+.qa-thread {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.qa-label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-muted);
+  letter-spacing: 0.04em;
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+.qa-user-text {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-navy);
+  background-color: var(--color-background);
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border-subtle);
+}
+
+.qa-answer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.45rem;
+}
+
+.qa-answer-paragraph {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--color-text);
+  margin-bottom: 1rem;
+}
+
+/* Citation Box */
+.citation-container {
+  background-color: var(--color-surface-tint);
+  border: 1px solid rgba(76, 99, 217, 0.2);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1rem;
+}
+
+.citation-header-text {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 0.35rem;
+}
+
+.citation-quote-text {
+  font-style: italic;
+  font-size: 0.86rem;
+  color: var(--color-text);
+  line-height: 1.5;
+  margin-bottom: 0.4rem;
+}
+
+.citation-location {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--color-muted);
+  font-weight: 600;
+}
+
+@media (max-width: 900px) {
+  .reader-breakdown-columns {
+    grid-template-columns: 1fr;
+  }
+}
