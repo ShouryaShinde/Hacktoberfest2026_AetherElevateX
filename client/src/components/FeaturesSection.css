@@ -1,0 +1,119 @@
+/* Features Section Styles — Modern Refined Palette */
+
+.features-section {
+  background-color: var(--color-background);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.features-header-row {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 3.5rem;
+  align-items: flex-end;
+  margin-bottom: 3.5rem;
+}
+
+.features-headline {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 4vw, 3.25rem);
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--color-navy);
+}
+
+.features-lead {
+  font-size: 1.05rem;
+  color: var(--color-muted);
+  line-height: 1.65;
+}
+
+/* 3-Column Responsive Grid */
+.features-grid-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.75rem;
+}
+
+.feature-item-card {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  height: 100%;
+}
+
+.feature-top-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.35rem;
+}
+
+.feature-icon-container {
+  width: 44px;
+  height: 44px;
+  background-color: var(--color-surface-tint);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary);
+  transition: transform var(--transition-fast);
+}
+
+.feature-item-card:hover .feature-icon-container {
+  transform: scale(1.05);
+}
+
+.feature-item-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-navy);
+  margin-bottom: 0.65rem;
+}
+
+.feature-item-description {
+  font-size: 0.94rem;
+  color: var(--color-muted);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  flex-grow: 1;
+}
+
+.feature-bottom-note {
+  margin-top: auto;
+  padding-top: 1.15rem;
+  border-top: 1px solid var(--color-border-subtle);
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.78rem;
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.note-bullet {
+  color: var(--color-teal);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 992px) {
+  .features-header-row {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .features-grid-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .features-grid-cards {
+    grid-template-columns: 1fr;
+  }
+}

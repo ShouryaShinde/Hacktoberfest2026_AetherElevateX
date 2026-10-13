@@ -1,0 +1,112 @@
+/* Hero Section Styles — Modern Refined Aesthetic */
+
+.hero-section {
+  background: linear-gradient(180deg, #FFFFFF 0%, var(--color-background) 100%);
+  padding-top: 4.5rem;
+  padding-bottom: 5.5rem;
+  position: relative;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.hero-container {
+  display: grid;
+  grid-template-columns: 1.15fr 0.95fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+/* Left Content Column */
+.hero-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-eyebrow {
+  margin-bottom: 1.25rem;
+  align-self: flex-start;
+}
+
+.eyebrow-dot {
+  width: 6px;
+  height: 6px;
+  background-color: var(--color-primary);
+  border-radius: 50%;
+}
+
+.hero-headline {
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 5.2vw, 4.25rem);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  color: var(--color-navy);
+  margin-bottom: 1.35rem;
+}
+
+.hero-highlight {
+  color: var(--color-primary);
+  position: relative;
+  display: inline-block;
+}
+
+.hero-description {
+  font-size: 1.15rem;
+  line-height: 1.65;
+  color: var(--color-muted);
+  max-width: 520px;
+  margin-bottom: 2.25rem;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.hero-cta {
+  padding: 0.85rem 1.75rem;
+  font-size: 1rem;
+}
+
+.hero-secondary-btn {
+  padding: 0.85rem 1.6rem;
+  font-size: 1rem;
+}
+
+.hero-supporting-line {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.86rem;
+  color: var(--color-muted);
+}
+
+.supporting-check {
+  color: var(--color-success);
+  font-weight: 700;
+}
+
+.supporting-text {
+  letter-spacing: -0.01em;
+}
+
+/* Right Upload Column */
+.hero-upload-column {
+  width: 100%;
+}
+
+@media (max-width: 992px) {
+  .hero-container {
+    grid-template-columns: 1fr;
+    gap: 3.5rem;
+  }
+
+  .hero-headline {
+    font-size: clamp(2.3rem, 7vw, 3.4rem);
+  }
+
+  .hero-description {
+    max-width: 100%;
+  }
+}

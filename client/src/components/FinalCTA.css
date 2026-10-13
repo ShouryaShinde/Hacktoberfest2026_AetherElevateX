@@ -1,0 +1,64 @@
+/* Final CTA Styles — Midnight Navy & Mint Teal Palette */
+
+.final-cta-section {
+  background-color: var(--color-background);
+  padding-top: 2rem;
+  padding-bottom: 5.5rem;
+}
+
+.final-cta-card {
+  background: linear-gradient(135deg, var(--color-navy) 0%, #162544 100%);
+  border-radius: var(--radius-lg);
+  padding: 4.5rem 3.5rem;
+  text-align: center;
+  box-shadow: 0 16px 36px -6px rgba(16, 28, 53, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.final-cta-inner {
+  max-width: 680px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.final-cta-heading {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 5vw, 3.8rem);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  color: #FFFFFF;
+  margin-top: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.final-cta-teal {
+  color: var(--color-teal);
+}
+
+.final-cta-copy {
+  font-size: 1.15rem;
+  line-height: 1.65;
+  color: #D3DCEE;
+  margin-bottom: 2.25rem;
+}
+
+.final-cta-action-row {
+  display: flex;
+  justify-content: center;
+}
+
+.final-cta-button {
+  padding: 0.95rem 2.25rem;
+  font-size: 1.05rem;
+  box-shadow: 0 4px 18px rgba(76, 99, 217, 0.45);
+}
+
+@media (max-width: 768px) {
+  .final-cta-card {
+    padding: 3rem 1.5rem;
+  }
+}
