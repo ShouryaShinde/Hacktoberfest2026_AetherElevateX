@@ -43,6 +43,13 @@ Hacktoberfest2026_AetherElevateX/
 
 ---
 
+## Integration Guide for Frontend Developers
+
+A comprehensive, ready-to-use guide with copy-paste client code, payload formats, and sample responses is available here:
+👉 **[Backend Connection Guide](docs/BACKEND_CONNECTION_GUIDE.md)**
+
+---
+
 ## Getting Started
 
 ### 1. Prerequisites
@@ -88,8 +95,9 @@ npm run dev
 ## Implementation Status
 
 - **Phase 0 (Baseline Setup & Inspection)**: Completed.
-  - Backend baseline established with Express and Mongoose structure.
-  - Health check endpoint (`GET /api/health`) configured.
-  - Note: Connecting to MongoDB Atlas requires adding your client IP to the Atlas Network Access whitelist.
-- **Phase 1 (UI Shell & Mock Data)**: Pending approval.
+- **Phase 1 (UI Shell & Mock Data)**: Managed on frontend client.
+- **Phase 2 (API Foundation)**: Completed (Request ID, CORS, centralized errors, rate limiting, Multer PDF & text extraction, validation).
+- **Phase 3 (Gemma Provider Adapter & Validation)**: Completed (Adapter for Gemma inference, versioned prompt template, Zod schema validation, safe JSON repair, mock provider).
+- **Phase 4 (End-to-End Analysis)**: In progress / Frontend integration.
+- **Phase 5 (Grounded Q&A & Sessions)**: Ready for implementation.
 
