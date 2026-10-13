@@ -1,125 +1,95 @@
-# Samjho AI — Plain-Language Document Assistant
+# Samjho AI
 
-> **"Understand the information. Know what to do next."**
+> **Understand the information. Know what to do next.**
 
-Samjho AI turns complex official documents—such as college notices, circulars, scholarship announcements, fee notices, and public forms—into clear, plain-language explanations and actionable next steps.
-
----
-
-## 1. Project Overview
-
-- **Problem:** Official documents often bury critical details (eligibility rules, mandatory documents, deadlines, fees, and next steps) in dense, bureaucratic prose.
-- **Target Audience:** College students, parents, and citizens navigating administrative paperwork.
-- **Primary Journey:** **Upload → Understand → Take Action** (with document-grounded follow-up Q&A).
-- **Core Principles:** Grounded answers over guesses, privacy by default (no permanent document retention for MVP), and clean structured outputs.
+Samjho AI helps people understand complex documents (college notices, circulars, scholarship announcements, application forms, and public notices) in plain language and turns them into reliable, actionable next steps.
 
 ---
 
-## 2. Repository Structure
+## Repository Structure
 
-The repository is structured into frontend (`client/`), backend (`server/`), and specification documentation (`docs/`):
+The project is structured into frontend and backend applications with documentation at the root:
 
 ```text
 Hacktoberfest2026_AetherElevateX/
-├── AGENTS.md                  # Instructions and guardrails for coding agents
-├── README.md                  # Project overview and developer instructions
-├── client/                    # Frontend application (React + Vite)
+├── docs/                   # Specifications, architecture, contracts, and implementation plan
+├── server/                 # Backend API (Node.js, Express, MVC architecture)
 │   ├── src/
-│   │   ├── assets/            # Static assets
-│   │   ├── App.jsx            # Application shell
-│   │   ├── App.css            # Component styles
-│   │   ├── index.css          # Global styling entrypoint
-│   │   └── main.jsx           # React DOM root
-│   ├── index.html             # Vite entry HTML
-│   ├── package.json           # Client dependencies and scripts
-│   └── vite.config.js         # Vite configuration
-├── server/                    # Backend API (Express.js)
-│   ├── src/
-│   │   ├── config/            # Server & database configuration
-│   │   ├── controllers/       # Route controllers (MVC pattern)
-│   │   ├── middlewares/       # Custom middleware
-│   │   ├── models/            # Data models
-│   │   ├── routes/            # API route definitions
-│   │   ├── services/          # Business logic services
-│   │   ├── utils/             # Helper utilities
-│   │   ├── app.js             # Express app definition
-│   │   └── server.js          # Server entry point
-│   ├── .env.example           # Backend environment template
-│   └── package.json           # Server dependencies and scripts
-└── docs/                      # Architectural specifications and contracts
-    ├── README.md              # Documentation index
-    ├── PRD.md                 # Product requirements document
-    ├── ARCHITECTURE.md        # Monorepo and design architecture
-    ├── API_CONTRACT.md        # API endpoints and error envelopes
-    ├── AI_PIPELINE.md         # Gemma prompt, schema, and validation
-    ├── DATABASE.md            # Persistence and retention guidelines
-    ├── UI_UX.md               # User interface design and components
-    ├── IMPLEMENTATION_PLAN.md # Phased delivery plan (Phases 0–6)
-    ├── SECURITY_AND_PRIVACY.md# Security, privacy, and injection defense
-    ├── TESTING.md             # Test fixtures and verification strategy
-    └── ENVIRONMENT.md         # Environment variables & local configuration
+│   │   ├── config/         # Database and environment configurations
+│   │   ├── controllers/    # Request controllers
+│   │   ├── middlewares/    # Custom middlewares
+│   │   ├── models/         # Database models and schemas
+│   │   ├── routes/         # API routes
+│   │   ├── services/       # Core business logic services
+│   │   ├── utils/          # Shared utilities and helpers
+│   │   ├── app.js          # Express app configuration
+│   │   └── server.js       # Server entry point
+│   ├── .env.example        # Environment variable template
+│   ├── package.json        # Backend dependencies and scripts
+│   └── README.md           # Backend documentation
+├── client/                 # Frontend application (React + Vite)
+├── AGENTS.md               # Antigravity coding guidelines and rules
+└── README.md               # Project root documentation
 ```
 
 ---
 
-## 3. Getting Started
+## Tech Stack
 
-### Prerequisites
-- Node.js (v18+ or v20+ recommended)
-- npm (v9+)
+- **Backend**: Node.js (ES Modules), Express.js, Mongoose, dotenv, cors, nodemon
+- **Frontend**: React, Vite
+- **Architecture**: MVC (Model-View-Controller) / Service separation
+- **AI Engine (Upcoming)**: Gemma 4 inference adapter for document summarization and grounded Q&A
 
-### Client Setup (Frontend)
+---
+
+## Getting Started
+
+### 1. Prerequisites
+- [Node.js](https://nodejs.org/) (v18+ recommended)
+- [MongoDB](https://www.mongodb.com/) (local daemon or MongoDB Atlas cluster)
+
+### 2. Backend Setup (`server/`)
+```bash
+cd server
+npm install
+cp .env.example .env
+```
+Configure your `.env` with:
+```env
+PORT=5000
+MONGODB_URI=your_mongodb_connection_string
+```
+
+Run in development mode:
+```bash
+npm run dev
+```
+
+Run in production mode:
+```bash
+npm start
+```
+
+Health check:
+```bash
+curl http://localhost:5000/api/health
+```
+
+### 3. Frontend Setup (`client/`)
 ```bash
 cd client
 npm install
 npm run dev
 ```
-The client dev server runs at `http://localhost:5173/`.
-
-Available client scripts:
-- `npm run dev`: Starts the Vite local development server.
-- `npm run build`: Bundles the client for production.
-- `npm run lint`: Runs ESLint over client files.
-- `npm run preview`: Previews the production build locally.
-
-### Server Setup (Backend)
-```bash
-cd server
-npm install
-cp .env.example .env
-npm run dev
-```
-The server runs on the port specified in `.env` (default: `5000` or `4000`).
-
-Available server scripts:
-- `npm start`: Runs the server with Node.js.
-- `npm run dev`: Runs the server with `nodemon` for auto-reloading.
 
 ---
 
-## 4. Phase Status & Roadmap
+## Implementation Status
 
-| Phase | Description | Status | Notes |
-|---|---|---|---|
-| **Phase 0** | Repository inspection and baseline | **Completed** | Baseline verified, gaps documented, checks executed |
-| **Phase 1** | UI shell and mock data | Pending | Upload/paste UI, selectors, responsive layout, mock response |
-| **Phase 2** | API foundation | Pending | Express app, health check, PDF extraction, validation |
-| **Phase 3** | Gemma provider adapter | Pending | Provider adapter, system prompt, Zod validation |
-| **Phase 4** | End-to-end analysis | Pending | Wire UI to `POST /api/v1/documents/analyze` |
-| **Phase 5** | Grounded follow-up Q&A | Pending | Temporary session Q&A, evidence references |
-| **Phase 6** | Quality, security, & evaluation | Pending | Evaluation suite, rate limiting, production hardening |
+- **Phase 0 (Baseline Setup & Inspection)**: Completed.
+  - Backend baseline established with Express and Mongoose structure.
+  - Health check endpoint (`GET /api/health`) configured.
+  - Note: Connecting to MongoDB Atlas requires adding your client IP to the Atlas Network Access whitelist.
+- **Phase 1 (UI Shell & Mock Data)**: Pending approval.
 
----
-
-## 5. Current Baseline & Known Blockers (Phase 0 Findings)
-
-1. **Client Styling / Tailwind Dependency:**
-   - `client/src/index.css` and `client/src/App.css` include `@import "tailwindcss";`.
-   - `tailwindcss` and `@tailwindcss/vite` are currently missing from `client/package.json`, causing `npm run build` to fail until installed and registered.
-2. **Client Language Stack:**
-   - Currently configured in JavaScript (`.jsx`), whereas `docs/ARCHITECTURE.md` specifies TypeScript (`.tsx`).
-3. **Server Dependencies & Database Requirement:**
-   - Dependencies in `server/` have not been installed yet (`node_modules` missing).
-   - `server/src/server.js` requires an active MongoDB connection (`connectDB()`), whereas `docs/DATABASE.md` specifies an in-memory/TTL session store without mandatory database persistence for the initial MVP.
-4. **API Contract & Routing:**
-   - Current server routes are mounted at `/api/health`, whereas `docs/API_CONTRACT.md` specifies `/api/v1` base path with `/health` returning `{ success: true, status: "ok" }`.
